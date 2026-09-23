@@ -15,11 +15,10 @@ import {
   Cat
 } from 'lucide-react';
 
-export default function AppLayout({ children }) {
+export default function AppLayout({ children, activeModel, onSelectModel, onNewSession }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const [activeModel, setActiveModel] = useState("GPT-5 Cyber");
   const [searchQuery, setSearchQuery] = useState("");
   const [isModelModalOpen, setIsModelModalOpen] = useState(false);
 
@@ -110,6 +109,7 @@ export default function AppLayout({ children }) {
         {/* Action Button */}
         <div className="p-3">
           <button 
+            onClick={onNewSession}
             className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white font-semibold shadow-lg shadow-violet-600/25 transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
             <SquarePlus className="h-5 w-5 shrink-0" />
@@ -177,22 +177,11 @@ export default function AppLayout({ children }) {
         <header className="h-16 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)]/90 backdrop-blur-md flex items-center justify-between px-4 z-10">
           <div className="flex items-center gap-3">
             <button 
-  onClick={() => setIsModelModalOpen(true)}
-  className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-workspace)] hover:border-violet-500/40 transition-all text-xs font-semibold shadow-sm"
->
-  <Cpu className="h-4 w-4 text-amber-500" />
-  <span>{activeModel}</span>
-  <span className="text-[10px] px-2 py-0.5 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-bold shadow-sm">
-    CYBER
-  </span>
-  <ChevronDown className="h-3.5 w-3.5 text-[var(--text-muted)]" />
-</button>
-
-            <button 
+              onClick={() => setIsModelModalOpen(true)}
               className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-workspace)] hover:border-violet-500/40 transition-all text-xs font-semibold shadow-sm"
             >
               <Cpu className="h-4 w-4 text-amber-500" />
-              <span>{activeModel}</span>
+              <span>{activeModel || "GPT-5 Cyber"}</span>
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-bold shadow-sm">
                 CYBER
               </span>
@@ -208,18 +197,18 @@ export default function AppLayout({ children }) {
           </div>
         </header>
 
-        {/* Content Render Canvas */}
+        {/* Content Render Canvas (Renders Landing OR Chat View cleanly) */}
         <main className="flex-1 overflow-y-auto relative p-4 md:p-8">
           {children}
         </main>
       </div>
 
       <ModelSelectorModal 
-  isOpen={isModelModalOpen}
-  onClose={() => setIsModelModalOpen(false)}
-  selectedModel={activeModel}
-  onSelectModel={(modelName) => setActiveModel(modelName)}
-/>
+        isOpen={isModelModalOpen}
+        onClose={() => setIsModelModalOpen(false)}
+        selectedModel={activeModel || "GPT-5 Cyber"}
+        onSelectModel={onSelectModel}
+      />
 
     </div>
   );
