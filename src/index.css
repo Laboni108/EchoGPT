@@ -1,15 +1,43 @@
 @import "tailwindcss";
 
-@theme {
-  --color-brand-bg-dark: #0B0F17;
-  --color-brand-card-dark: #161C28;
-  --color-brand-border-dark: #262F40;
-  --color-brand-bg-light: #F8FAFC;
-  --color-brand-card-light: #FFFFFF;
-  --color-brand-accent: #6366F1;
-  --color-brand-accent-hover: #4F46E5;
+@layer base {
+  :root {
+    --bg-workspace: #F3F1EC;
+    --bg-surface: #FFFFFF;
+    --bg-surface-hover: #EBE8E0;
+    --border-subtle: #E2DDD3;
+    --text-main: #18181B;
+    --text-muted: #71717A;
+    --accent-glow: rgba(124, 58, 237, 0.08);
+  }
+
+  .dark {
+    --bg-workspace: #080A0F;
+    --bg-surface: #111520;
+    --bg-surface-hover: #1A202C;
+    --border-subtle: #1F2738;
+    --text-main: #F4F4F5;
+    --text-muted: #9FE3F0;
+    --accent-glow: rgba(139, 92, 246, 0.15);
+  }
 }
 
 body {
-  @apply bg-slate-50 text-slate-900 dark:bg-[#0B0F17] dark:text-slate-100 antialiased font-sans transition-colors duration-200;
+  background-color: var(--bg-workspace);
+  color: var(--text-main);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  antialiased: true;
+  transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 20px -2px var(--accent-glow);
+}
+
+*:focus-visible {
+  outline: 2px solid #8B5CF6;
+  outline-offset: 2px;
 }
