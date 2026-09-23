@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-bg-dark: #0B0F17;
+  --color-brand-card-dark: #161C28;
+  --color-brand-border-dark: #262F40;
+  --color-brand-bg-light: #F8FAFC;
+  --color-brand-card-light: #FFFFFF;
+  --color-brand-accent: #6366F1;
+  --color-brand-accent-hover: #4F46E5;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 dark:bg-[#0B0F17] dark:text-slate-100 antialiased font-sans transition-colors duration-200;
+}
