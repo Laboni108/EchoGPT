@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SettingsModal from './SettingsModal';
+import UserProfile from './UserProfile';
+import PlanModal from './PlanModal';
 import ModelSelectorModal from './ModelSelectorModal';
 import { 
   PanelLeftClose, 
@@ -22,7 +24,8 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [isModelModalOpen, setIsModelModalOpen] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false); // <--- Added Settings state
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -157,7 +160,7 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
         </div>
 
         {/* Footer */}
-        <div className="p-3 border-t border-[var(--border-subtle)] space-y-1">
+        <div className="p-3 border-t border-[var(--border-subtle)] space-y-2">
           <button 
             onClick={() => setIsDarkMode(!isDarkMode)}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface-hover)] transition-colors"
@@ -174,6 +177,9 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
             <Settings className="h-4 w-4" />
             {isSidebarOpen && <span>Preferences</span>}
           </button>
+
+          {/* User Profile Card */}
+        {isSidebarOpen && <UserProfile onClick={() => setIsPlanModalOpen(true)} />}
         </div>
       </aside>
 
@@ -224,6 +230,10 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
         onClose={() => setIsSettingsOpen(false)}
       />
 
+<PlanModal 
+  isOpen={isPlanModalOpen}
+  onClose={() => setIsPlanModalOpen(false)}
+/>
     </div>
   );
 }
