@@ -44,6 +44,11 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  const handleNewSessionClick = () => {
+    setIsMobileOpen(false);
+    if (onNewSession) onNewSession();
+  };
+
   const dummyHistory = [
     { id: 1, title: "Refactoring React Hooks", time: "Today" },
     { id: 2, title: "EchoGPT Cyber Architecture", time: "Today" },
@@ -72,7 +77,7 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
         className={`
           fixed md:static inset-y-0 left-0 z-50 flex flex-col
           bg-[var(--bg-surface)] border-r border-[var(--border-subtle)]
-          transition-all duration-300 ease-in-out
+          transition-all duration-300 ease-in-out shrink-0
           ${isSidebarOpen ? 'w-72' : 'w-0 md:w-20'}
           ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
         `}
@@ -99,6 +104,7 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
             )}
           </div>
 
+          {/* Desktop Collapse Button */}
           <button 
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="hidden md:flex p-2 rounded-xl text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface-hover)] transition-colors"
@@ -107,6 +113,7 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
             {isSidebarOpen ? <PanelLeftClose className="h-5 w-5" /> : <PanelLeft className="h-5 w-5" />}
           </button>
 
+          {/* Mobile Close Button */}
           <button 
             onClick={() => setIsMobileOpen(false)}
             className="md:hidden p-2 rounded-xl text-[var(--text-muted)] hover:text-[var(--text-main)]"
@@ -118,8 +125,9 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
         {/* Action Button */}
         <div className="p-3">
           <button 
-            onClick={onNewSession}
+            onClick={handleNewSessionClick}
             className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white font-semibold shadow-lg shadow-violet-600/25 transition-all hover:scale-[1.02] active:scale-[0.98]"
+            title="New Session"
           >
             <SquarePlus className="h-5 w-5 shrink-0" />
             {isSidebarOpen && <span>New Session</span>}
@@ -152,6 +160,7 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
           {filteredHistory.map((item) => (
             <button 
               key={item.id}
+              onClick={() => setIsMobileOpen(false)}
               className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface-hover)] transition-colors text-left group"
             >
               <MessageSquare className="h-4 w-4 shrink-0 group-hover:text-amber-500 transition-colors" />
@@ -199,6 +208,17 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
             >
               <Menu className="h-5 w-5" />
             </button>
+
+            {/* Desktop Expand Toggle (Visible only when sidebar is collapsed on desktop) */}
+            {!isSidebarOpen && (
+              <button 
+                onClick={() => setIsSidebarOpen(true)}
+                className="hidden md:flex p-2 rounded-xl text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface-hover)] transition-colors"
+                title="Expand sidebar"
+              >
+                <PanelLeft className="h-5 w-5" />
+              </button>
+            )}
 
             {/* Model Selector Button */}
             <button 
