@@ -4,9 +4,14 @@ import ChatTranscript from './components/ChatTranscript';
 import PromptComposer from './components/PromptComposer';
 import TypingIndicator from './components/TypingIndicator';
 import ErrorMessage from './components/ErrorMessage';
+import LandingPage from './components/LandingPage';
 import { Cat, ArrowRight, Zap, Code2, Sparkles, Terminal, ArrowLeft } from 'lucide-react';
 
 export default function App() {
+  // State to control Landing Page vs Chat Workspace view
+  const [showLandingPage, setShowLandingPage] = useState(true);
+
+  // Chat History with LocalStorage Sync
   const [messages, setMessages] = useState(() => {
     try {
       const saved = localStorage.getItem('echogpt_chat_history');
@@ -43,9 +48,8 @@ export default function App() {
     setMessages(prev => [...prev, userMsg]);
     setIsGenerating(true);
 
-    // Simulated AI response with loading delay
+    // Simulated AI response
     setTimeout(() => {
-      // Set to true to test simulated error state handling
       const simulateError = false;
 
       if (simulateError) {
@@ -75,10 +79,30 @@ export default function App() {
     localStorage.removeItem('echogpt_chat_history');
   };
 
+  // 1. RENDER LANDING PAGE IF ACTIVE
+  if (showLandingPage) {
+    return <LandingPage onLaunchApp={() => setShowLandingPage(false)} />;
+  }
+
+  // 2. RENDER CHAT WORKSPACE IF ACTIVE
   return (
-    <AppLayout activeModel={activeModel} onSelectModel={setActiveModel}>
+    <AppLayout 
+      activeModel={activeModel} 
+      onSelectModel={setActiveModel}
+      onNewSession={handleResetChat}
+    >
       <div className="h-full flex flex-col justify-between max-w-3xl mx-auto w-full">
         
+        {/* Navigation bar button to return to Landing Page */}
+        <div className="flex justify-between items-center pb-2 mb-2 border-b border-[var(--border-subtle)]">
+          <button 
+            onClick={() => setShowLandingPage(true)}
+            className="text-xs font-semibold text-violet-400 hover:text-amber-400 transition-colors flex items-center gap-1.5 px-2 py-1 rounded-lg hover:bg-[var(--bg-surface-hover)]"
+          >
+            ← Back to Landing Page
+          </button>
+        </div>
+
         {messages.length === 0 ? (
           <div className="flex-1 flex flex-col justify-center items-center text-center space-y-6 py-4">
             <div className="relative group cursor-pointer">
