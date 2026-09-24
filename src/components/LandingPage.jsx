@@ -1,16 +1,43 @@
 import React, { useState } from 'react';
-import { Cat, Menu, X, ArrowRight, Sparkles, Code2, Shield, Cpu, Zap, Star } from 'lucide-react';
+import { 
+  Cat, Menu, X, ArrowRight, Sparkles, Code2, Shield, Cpu, Zap, Star, 
+  CheckCircle2, Bot, Terminal, Layers, Globe, ChevronDown, HelpCircle 
+} from 'lucide-react';
 
 export default function LandingPage({ onLaunchApp }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const modelsList = [
+    {
+      name: "GPT-5 Cyber Engine",
+      provider: "OpenAI Frontier",
+      badge: "PRIMARY",
+      description: "Optimized for heavy code architecture synthesis, complex reasoning, and multi-step refactoring.",
+      accent: "border-amber-500/40 bg-amber-500/5 text-amber-400"
+    },
+    {
+      name: "Claude 3.5 Sonnet",
+      provider: "Anthropic",
+      badge: "CREATIVE",
+      description: "Exceptional nuance in technical documentation, architectural reviews, and human-like prose.",
+      accent: "border-fuchsia-500/40 bg-fuchsia-500/5 text-fuchsia-400"
+    },
+    {
+      name: "Gemini 1.5 Pro",
+      provider: "Google DeepMind",
+      badge: "1M CONTEXT",
+      description: "Massive context window processing for analyzing entire codebase repositories in a single prompt.",
+      accent: "border-violet-500/40 bg-violet-500/5 text-violet-400"
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-violet-500 selection:text-white">
-      {/* --- RESPONSIVE NAVBAR --- */}
+      
+      {/* 1. RESPONSIVE NAVBAR */}
       <nav className="sticky top-0 z-50 backdrop-blur-md bg-slate-950/80 border-b border-slate-800/80 px-4 sm:px-8 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           
-          {/* Logo */}
           <div className="flex items-center gap-2.5 cursor-pointer" onClick={onLaunchApp}>
             <div className="p-2 rounded-xl bg-gradient-to-tr from-violet-600 via-fuchsia-500 to-amber-500 text-slate-950 shadow-md shadow-violet-500/20">
               <Cat className="h-5 w-5 stroke-[2.5]" />
@@ -20,14 +47,12 @@ export default function LandingPage({ onLaunchApp }) {
             </span>
           </div>
 
-          {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
+            <a href="#preview" className="hover:text-white transition-colors">Preview</a>
             <a href="#features" className="hover:text-white transition-colors">Features</a>
             <a href="#models" className="hover:text-white transition-colors">AI Models</a>
-            <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
           </div>
 
-          {/* Desktop CTA Button */}
           <div className="hidden md:flex items-center gap-4">
             <button 
               onClick={onLaunchApp}
@@ -38,7 +63,6 @@ export default function LandingPage({ onLaunchApp }) {
             </button>
           </div>
 
-          {/* Mobile Hamburger Toggle Button */}
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white"
@@ -48,30 +72,11 @@ export default function LandingPage({ onLaunchApp }) {
           </button>
         </div>
 
-        {/* Mobile Dropdown Drawer */}
         {mobileMenuOpen && (
           <div className="md:hidden mt-3 pt-4 pb-2 border-t border-slate-800 flex flex-col gap-3 text-sm font-medium text-slate-300 animate-in fade-in slide-in-from-top-2">
-            <a 
-              href="#features" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-lg hover:bg-slate-900 hover:text-white transition-colors"
-            >
-              Features
-            </a>
-            <a 
-              href="#models" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-lg hover:bg-slate-900 hover:text-white transition-colors"
-            >
-              AI Models
-            </a>
-            <a 
-              href="#pricing" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-lg hover:bg-slate-900 hover:text-white transition-colors"
-            >
-              Pricing
-            </a>
+            <a href="#preview" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-slate-900 hover:text-white">Preview</a>
+            <a href="#features" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-slate-900 hover:text-white">Features</a>
+            <a href="#models" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-slate-900 hover:text-white">AI Models</a>
             <button 
               onClick={() => { setMobileMenuOpen(false); onLaunchApp(); }}
               className="mt-2 w-full py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-semibold text-center flex items-center justify-center gap-2 shadow-md"
@@ -83,11 +88,11 @@ export default function LandingPage({ onLaunchApp }) {
         )}
       </nav>
 
-      {/* --- HERO SECTION --- */}
-      <section className="relative px-4 sm:px-8 py-16 md:py-24 max-w-5xl mx-auto text-center flex flex-col items-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-xs font-semibold mb-6">
-          <Sparkles className="h-3.5 w-3.5" />
-          <span>Next-Gen Multi-Model AI Interface</span>
+      {/* 2. HERO SECTION */}
+      <section className="relative px-4 sm:px-8 pt-16 pb-12 max-w-5xl mx-auto text-center flex flex-col items-center">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-xs font-semibold mb-6">
+          <Sparkles className="h-3.5 w-3.5 text-amber-400" />
+          <span>Next-Gen Multi-Model AI Interface v4.0</span>
         </div>
 
         <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-tight max-w-3xl">
@@ -109,43 +114,82 @@ export default function LandingPage({ onLaunchApp }) {
         </div>
       </section>
 
-      {/* --- FEATURES GRID SECTION --- */}
-      <section id="features" className="px-4 sm:px-8 py-16 bg-slate-900/50 border-t border-slate-800/80">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">Built for modern developers</h2>
-            <p className="text-slate-400 text-sm mt-2">Everything you need to write, debug, and ideate faster.</p>
+      {/* 3. PRODUCT PREVIEW MOCKUP FRAME */}
+      <section id="preview" className="px-4 sm:px-8 py-10 max-w-5xl mx-auto w-full">
+        <div className="rounded-2xl border border-slate-800 bg-slate-900/90 shadow-2xl overflow-hidden backdrop-blur-xl">
+          {/* Top Mockup Window Header */}
+          <div className="px-4 py-3 bg-slate-950/80 border-b border-slate-800 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="h-3 w-3 rounded-full bg-rose-500/80" />
+              <div className="h-3 w-3 rounded-full bg-amber-500/80" />
+              <div className="h-3 w-3 rounded-full bg-emerald-500/80" />
+              <span className="ml-2 text-xs font-mono text-slate-500 hidden sm:inline">echogpt-cyber-workspace.app</span>
+            </div>
+            <div className="text-[11px] font-mono text-amber-400 bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">
+              GPT-5 CYBER ONLINE
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-3">
-              <div className="p-2.5 rounded-xl bg-violet-500/10 text-violet-400 w-fit">
-                <Cpu className="h-6 w-6" />
+          {/* Interactive Chat Mockup Interface */}
+          <div className="p-6 space-y-4 font-sans text-xs sm:text-sm">
+            <div className="flex gap-3 items-start">
+              <div className="h-7 w-7 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 text-xs shrink-0 font-bold">
+                U
               </div>
-              <h3 className="font-bold text-white text-lg">Multi-Engine Support</h3>
-              <p className="text-slate-400 text-xs leading-relaxed">Switch dynamically between top-tier language models depending on your specific task.</p>
+              <div className="p-3.5 rounded-2xl bg-slate-800/60 border border-slate-700/50 text-slate-200 max-w-lg">
+                Write a high-performance React hook for debounce state synchronization with TypeScript.
+              </div>
             </div>
 
-            <div className="p-6 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-3">
-              <div className="p-2.5 rounded-xl bg-fuchsia-500/10 text-fuchsia-400 w-fit">
-                <Code2 className="h-6 w-6" />
+            <div className="flex gap-3 items-start">
+              <div className="h-7 w-7 rounded-lg bg-slate-900 border border-slate-700 flex items-center justify-center text-amber-400 shrink-0 shadow-md">
+                <Cat className="h-4 w-4" />
               </div>
-              <h3 className="font-bold text-white text-lg">Code Optimization</h3>
-              <p className="text-slate-400 text-xs leading-relaxed">Get clean, formatted code blocks with language highlighting and instant debug suggestions.</p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-3">
-              <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 w-fit">
-                <Zap className="h-6 w-6" />
+              <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-slate-300 max-w-xl space-y-3 w-full">
+                <p className="text-slate-300">Here is an optimized, memory-safe debounce hook implementation:</p>
+                <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 font-mono text-xs text-amber-300/90 overflow-x-auto">
+                  <code>{`function useDebounce<T>(value: T, delay: number): T {\n  const [debounced, setDebounced] = useState<T>(value);\n  useEffect(() => {\n    const handler = setTimeout(() => setDebounced(value), delay);\n    return () => clearTimeout(handler);\n  }, [value, delay]);\n  return debounced;\n}`}</code>
+                </div>
               </div>
-              <h3 className="font-bold text-white text-lg">Low-Latency Streaming</h3>
-              <p className="text-slate-400 text-xs leading-relaxed">Enjoy smooth real-time generation indicators and instant prompt presets.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* --- FOOTER --- */}
+      {/* 4. AI MODELS SHOWCASE SECTION */}
+      <section id="models" className="px-4 sm:px-8 py-16 bg-slate-900/40 border-t border-slate-800/80">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">Frontier Intelligence at your fingertips</h2>
+            <p className="text-slate-400 text-sm mt-2">Switch neural engines with a single click inside your prompt composer.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {modelsList.map((model, idx) => (
+              <div key={idx} className="p-6 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col justify-between space-y-4 hover:border-violet-500/40 transition-all">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${model.accent}`}>
+                      {model.badge}
+                    </span>
+                    <span className="text-xs text-slate-500 font-mono">{model.provider}</span>
+                  </div>
+                  <h3 className="font-extrabold text-white text-lg">{model.name}</h3>
+                  <p className="text-slate-400 text-xs leading-relaxed">{model.description}</p>
+                </div>
+                <button 
+                  onClick={onLaunchApp}
+                  className="w-full py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 transition-colors"
+                >
+                  Test with Engine →
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
       <footer className="border-t border-slate-800/80 py-8 px-4 text-center text-xs text-slate-500">
         <p>© 2026 Echo Cat AI. All rights reserved.</p>
       </footer>
