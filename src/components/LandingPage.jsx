@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { 
   Cat, Menu, X, ArrowRight, Sparkles, Code2, Shield, Cpu, Zap, Star, 
   CheckCircle2, Bot, Terminal, Layers, Globe, ChevronDown, HelpCircle,
-  Lock, RefreshCw, Workflow, Flame
+  Lock, RefreshCw, Workflow, Flame, Check
 } from 'lucide-react';
 
 export default function LandingPage({ onLaunchApp }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [annualBilling, setAnnualBilling] = useState(true);
 
   const modelsList = [
     {
@@ -59,6 +60,56 @@ export default function LandingPage({ onLaunchApp }) {
     }
   ];
 
+  const pricingPlans = [
+    {
+      name: "Free Cyber",
+      priceMonthly: "$0",
+      priceAnnual: "$0",
+      period: "forever",
+      description: "Ideal for casual prompts, learning React/CSS, and quick code debugging.",
+      features: [
+        "Standard response speeds",
+        "Access to GPT-5 Cyber (Rate limited)",
+        "Local browser chat history",
+        "Standard code syntax highlighting"
+      ],
+      popular: false,
+      cta: "Get Started Free"
+    },
+    {
+      name: "Pro Cyber",
+      priceMonthly: "$20",
+      priceAnnual: "$16",
+      period: "per month",
+      description: "For professional software engineers and designers who require maximum performance.",
+      features: [
+        "Unlimited high-speed prompts",
+        "Full access to GPT-5, Claude 3.5 & Gemini 1.5",
+        "Priority GPU queuing & sub-50ms streaming",
+        "Advanced context window retention",
+        "Custom system prompt presets"
+      ],
+      popular: true,
+      cta: "Upgrade to Pro Cyber"
+    },
+    {
+      name: "Enterprise",
+      priceMonthly: "$49",
+      priceAnnual: "$39",
+      period: "per user / month",
+      description: "Custom compliance, dedicated neural nodes, and team workspaces.",
+      features: [
+        "Everything in Pro Cyber",
+        "Zero data retention SLA & SOC2 isolation",
+        "Custom LLM fine-tuning & API access",
+        "Dedicated account manager & 24/7 support",
+        "Unlimited seat allocation"
+      ],
+      popular: false,
+      cta: "Contact Sales"
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-violet-500 selection:text-white">
       
@@ -79,6 +130,7 @@ export default function LandingPage({ onLaunchApp }) {
             <a href="#preview" className="hover:text-white transition-colors">Preview</a>
             <a href="#models" className="hover:text-white transition-colors">AI Models</a>
             <a href="#why-echogpt" className="hover:text-white transition-colors">Why EchoGPT</a>
+            <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
           </div>
 
           <div className="hidden md:flex items-center gap-4">
@@ -105,6 +157,7 @@ export default function LandingPage({ onLaunchApp }) {
             <a href="#preview" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-slate-900 hover:text-white">Preview</a>
             <a href="#models" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-slate-900 hover:text-white">AI Models</a>
             <a href="#why-echogpt" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-slate-900 hover:text-white">Why EchoGPT</a>
+            <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-slate-900 hover:text-white">Pricing</a>
             <button 
               onClick={() => { setMobileMenuOpen(false); onLaunchApp(); }}
               className="mt-2 w-full py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-semibold text-center flex items-center justify-center gap-2 shadow-md"
@@ -215,7 +268,7 @@ export default function LandingPage({ onLaunchApp }) {
         </div>
       </section>
 
-      {/* 5. STEP 2 FEATURE: WHY CHOOSE ECHOGPT GRID */}
+      {/* 5. WHY CHOOSE ECHOGPT GRID */}
       <section id="why-echogpt" className="px-4 sm:px-8 py-16 bg-slate-950 border-t border-slate-800/80">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12 space-y-2">
@@ -249,6 +302,86 @@ export default function LandingPage({ onLaunchApp }) {
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. STEP 3 FEATURE: PRICING TIERS & BILLING TOGGLE */}
+      <section id="pricing" className="px-4 sm:px-8 py-16 bg-slate-900/50 border-t border-slate-800/80">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-10 space-y-3">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">Simple, transparent pricing</h2>
+            <p className="text-slate-400 text-sm">Choose the tier that matches your engineering ambition.</p>
+            
+            {/* Billing Toggle Switch */}
+            <div className="pt-4 flex items-center justify-center gap-3">
+              <span className={`text-xs font-semibold ${!annualBilling ? 'text-white' : 'text-slate-400'}`}>
+                Monthly
+              </span>
+              <button 
+                onClick={() => setAnnualBilling(!annualBilling)}
+                className="w-12 h-6 rounded-full bg-slate-800 border border-slate-700 p-1 flex items-center transition-colors relative"
+              >
+                <div className={`h-4 w-4 rounded-full bg-gradient-to-r from-violet-500 to-amber-400 transition-transform ${annualBilling ? 'translate-x-6' : 'translate-x-0'}`} />
+              </button>
+              <span className={`text-xs font-semibold ${annualBilling ? 'text-white' : 'text-slate-400'} flex items-center gap-1.5`}>
+                Annual
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-400/10 text-amber-400 border border-amber-400/20">
+                  SAVE 20%
+                </span>
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {pricingPlans.map((plan, idx) => (
+              <div 
+                key={idx} 
+                className={`p-6 rounded-2xl flex flex-col justify-between space-y-6 relative transition-all ${
+                  plan.popular 
+                    ? 'bg-slate-950 border-2 border-violet-500/80 shadow-xl shadow-violet-500/10 scale-105' 
+                    : 'bg-slate-950 border border-slate-800/80'
+                }`}
+              >
+                {plan.popular && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-extrabold text-[10px] tracking-wider uppercase shadow-md">
+                    MOST POPULAR
+                  </div>
+                )}
+
+                <div className="space-y-4">
+                  <h3 className="font-bold text-white text-xl">{plan.name}</h3>
+                  <p className="text-slate-400 text-xs min-h-[36px]">{plan.description}</p>
+                  
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-4xl font-extrabold text-white">
+                      {annualBilling ? plan.priceAnnual : plan.priceMonthly}
+                    </span>
+                    <span className="text-xs text-slate-500">{plan.period}</span>
+                  </div>
+
+                  <div className="border-t border-slate-800/80 pt-4 space-y-2.5">
+                    {plan.features.map((feat, fIdx) => (
+                      <div key={fIdx} className="flex items-center gap-2.5 text-xs text-slate-300">
+                        <Check className="h-4 w-4 text-emerald-400 shrink-0" />
+                        <span>{feat}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <button 
+                  onClick={onLaunchApp}
+                  className={`w-full py-3 rounded-xl font-semibold text-xs transition-all ${
+                    plan.popular
+                      ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:opacity-90 shadow-lg shadow-violet-600/30'
+                      : 'bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800'
+                  }`}
+                >
+                  {plan.cta}
+                </button>
+              </div>
+            ))}
           </div>
         </div>
       </section>
