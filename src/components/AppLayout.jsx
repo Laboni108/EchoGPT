@@ -15,7 +15,8 @@ import {
   Cpu, 
   X,
   ChevronDown,
-  Cat
+  Cat,
+  Menu
 } from 'lucide-react';
 
 export default function AppLayout({ children, activeModel, onSelectModel, onNewSession }) {
@@ -179,7 +180,7 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
           </button>
 
           {/* User Profile Card */}
-        {isSidebarOpen && <UserProfile onClick={() => setIsPlanModalOpen(true)} />}
+          {isSidebarOpen && <UserProfile onClick={() => setIsPlanModalOpen(true)} />}
         </div>
       </aside>
 
@@ -189,6 +190,17 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
         {/* Header Bar */}
         <header className="h-16 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)]/90 backdrop-blur-md flex items-center justify-between px-4 z-10">
           <div className="flex items-center gap-3">
+            
+            {/* Mobile Drawer Hamburger Toggle Button */}
+            <button 
+              onClick={() => setIsMobileOpen(true)}
+              className="md:hidden p-2 rounded-xl text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface-hover)] transition-colors"
+              aria-label="Open navigation sidebar"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+
+            {/* Model Selector Button */}
             <button 
               onClick={() => setIsModelModalOpen(true)}
               className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-workspace)] hover:border-violet-500/40 transition-all text-xs font-semibold shadow-sm"
@@ -205,7 +217,7 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-500 border border-amber-500/20">
               <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
-              NEURAL ONLINE
+              <span className="hidden sm:inline">NEURAL ONLINE</span>
             </span>
           </div>
         </header>
@@ -230,10 +242,11 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
         onClose={() => setIsSettingsOpen(false)}
       />
 
-<PlanModal 
-  isOpen={isPlanModalOpen}
-  onClose={() => setIsPlanModalOpen(false)}
-/>
+      {/* Plan Modal */}
+      <PlanModal 
+        isOpen={isPlanModalOpen}
+        onClose={() => setIsPlanModalOpen(false)}
+      />
     </div>
   );
 }
