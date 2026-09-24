@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { 
   Cat, Menu, X, ArrowRight, Sparkles, Code2, Shield, Cpu, Zap, Star, 
-  CheckCircle2, Bot, Terminal, Layers, Globe, ChevronDown, HelpCircle 
+  CheckCircle2, Bot, Terminal, Layers, Globe, ChevronDown, HelpCircle,
+  Lock, RefreshCw, Workflow, Flame
 } from 'lucide-react';
 
 export default function LandingPage({ onLaunchApp }) {
@@ -31,6 +32,33 @@ export default function LandingPage({ onLaunchApp }) {
     }
   ];
 
+  const whyChooseUs = [
+    {
+      icon: Zap,
+      title: "Sub-50ms Latency Streaming",
+      description: "Powered by edge-rendered WebSocket nodes so you receive live token responses with zero terminal jitter or delays.",
+      badge: "ULTRA FAST"
+    },
+    {
+      icon: Lock,
+      title: "Zero Data Retention Privacy",
+      description: "Your prompts and code snippets are never stored, logged, or used to train public language models.",
+      badge: "ENCRYPTED"
+    },
+    {
+      icon: RefreshCw,
+      title: "Seamless Model Switching",
+      description: "Switch between GPT-5, Claude 3.5, and Gemini instantly without losing your thread context or starting over.",
+      badge: "DYNAMIC"
+    },
+    {
+      icon: Workflow,
+      title: "Native Developer Workspace",
+      description: "Built-in syntax highlighting, one-click code copying, terminal output blocks, and customizable prompt presets.",
+      badge: "DEV FIRST"
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-violet-500 selection:text-white">
       
@@ -49,8 +77,8 @@ export default function LandingPage({ onLaunchApp }) {
 
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
             <a href="#preview" className="hover:text-white transition-colors">Preview</a>
-            <a href="#features" className="hover:text-white transition-colors">Features</a>
             <a href="#models" className="hover:text-white transition-colors">AI Models</a>
+            <a href="#why-echogpt" className="hover:text-white transition-colors">Why EchoGPT</a>
           </div>
 
           <div className="hidden md:flex items-center gap-4">
@@ -75,8 +103,8 @@ export default function LandingPage({ onLaunchApp }) {
         {mobileMenuOpen && (
           <div className="md:hidden mt-3 pt-4 pb-2 border-t border-slate-800 flex flex-col gap-3 text-sm font-medium text-slate-300 animate-in fade-in slide-in-from-top-2">
             <a href="#preview" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-slate-900 hover:text-white">Preview</a>
-            <a href="#features" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-slate-900 hover:text-white">Features</a>
             <a href="#models" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-slate-900 hover:text-white">AI Models</a>
+            <a href="#why-echogpt" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2 rounded-lg hover:bg-slate-900 hover:text-white">Why EchoGPT</a>
             <button 
               onClick={() => { setMobileMenuOpen(false); onLaunchApp(); }}
               className="mt-2 w-full py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-semibold text-center flex items-center justify-center gap-2 shadow-md"
@@ -117,7 +145,6 @@ export default function LandingPage({ onLaunchApp }) {
       {/* 3. PRODUCT PREVIEW MOCKUP FRAME */}
       <section id="preview" className="px-4 sm:px-8 py-10 max-w-5xl mx-auto w-full">
         <div className="rounded-2xl border border-slate-800 bg-slate-900/90 shadow-2xl overflow-hidden backdrop-blur-xl">
-          {/* Top Mockup Window Header */}
           <div className="px-4 py-3 bg-slate-950/80 border-b border-slate-800 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="h-3 w-3 rounded-full bg-rose-500/80" />
@@ -130,7 +157,6 @@ export default function LandingPage({ onLaunchApp }) {
             </div>
           </div>
 
-          {/* Interactive Chat Mockup Interface */}
           <div className="p-6 space-y-4 font-sans text-xs sm:text-sm">
             <div className="flex gap-3 items-start">
               <div className="h-7 w-7 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 text-xs shrink-0 font-bold">
@@ -185,6 +211,44 @@ export default function LandingPage({ onLaunchApp }) {
                 </button>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5. STEP 2 FEATURE: WHY CHOOSE ECHOGPT GRID */}
+      <section id="why-echogpt" className="px-4 sm:px-8 py-16 bg-slate-950 border-t border-slate-800/80">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12 space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold">
+              <Flame className="h-3.5 w-3.5" />
+              <span>UNMATCHED ADVANTAGES</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">Why developers switch to EchoGPT</h2>
+            <p className="text-slate-400 text-sm max-w-lg mx-auto">Engineered from the ground up for speed, privacy, and continuous flow state.</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {whyChooseUs.map((item, idx) => {
+              const IconComponent = item.icon;
+              return (
+                <div key={idx} className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800/90 hover:border-slate-700 transition-all space-y-4 group">
+                  <div className="flex items-center justify-between">
+                    <div className="p-3 rounded-xl bg-violet-600/10 border border-violet-500/20 text-violet-400 group-hover:bg-violet-600 group-hover:text-white transition-colors">
+                      <IconComponent className="h-6 w-6" />
+                    </div>
+                    <span className="text-[10px] font-extrabold tracking-wider px-2.5 py-0.5 rounded-md bg-slate-800 text-slate-400 border border-slate-700">
+                      {item.badge}
+                    </span>
+                  </div>
+                  <h3 className="font-bold text-white text-lg group-hover:text-amber-400 transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
