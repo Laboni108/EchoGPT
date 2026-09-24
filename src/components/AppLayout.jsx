@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import SettingsModal from './SettingsModal';
 import ModelSelectorModal from './ModelSelectorModal';
 import { 
   PanelLeftClose, 
@@ -21,6 +22,7 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [isModelModalOpen, setIsModelModalOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false); // <--- Added Settings state
 
   useEffect(() => {
     if (isDarkMode) {
@@ -72,12 +74,15 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
         `}
         aria-label="Main Navigation"
       >
-        {/* Header with Echo Cat Icon */}
+        {/* Header with High-Contrast Echo Cat Badge */}
         <div className="flex items-center justify-between h-16 px-4 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-3 overflow-hidden">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-tr from-violet-600 via-fuchsia-500 to-amber-400 text-white shadow-lg shadow-violet-500/20 group hover:rotate-6 transition-transform">
+            
+            {/* High-Contrast Cat Logo Badge */}
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-slate-900 dark:bg-[#111726] text-amber-400 border border-slate-700 dark:border-slate-800 shadow-md">
               <Cat className="h-6 w-6 stroke-[2.2]" />
             </div>
+
             {isSidebarOpen && (
               <div className="flex flex-col">
                 <span className="font-extrabold text-lg tracking-tight bg-gradient-to-r from-violet-500 via-fuchsia-500 to-amber-500 bg-clip-text text-transparent">
@@ -161,7 +166,9 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
             {isSidebarOpen && <span>{isDarkMode ? 'Light Aesthetic' : 'Dark Cyber'}</span>}
           </button>
 
+          {/* Preferences Button linked to SettingsModal */}
           <button 
+            onClick={() => setIsSettingsOpen(true)}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface-hover)] transition-colors"
           >
             <Settings className="h-4 w-4" />
@@ -197,17 +204,24 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
           </div>
         </header>
 
-        {/* Content Render Canvas (Renders Landing OR Chat View cleanly) */}
+        {/* Content Render Canvas */}
         <main className="flex-1 overflow-y-auto relative p-4 md:p-8">
           {children}
         </main>
       </div>
 
+      {/* Model Selector Modal */}
       <ModelSelectorModal 
         isOpen={isModelModalOpen}
         onClose={() => setIsModelModalOpen(false)}
         selectedModel={activeModel || "GPT-5 Cyber"}
         onSelectModel={onSelectModel}
+      />
+
+      {/* Settings Modal */}
+      <SettingsModal 
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
       />
 
     </div>

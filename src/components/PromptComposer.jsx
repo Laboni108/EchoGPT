@@ -1,84 +1,87 @@
-import React, { useState } from 'react';
-import { Send, Paperclip, Mic, Sparkles } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { ArrowUp, Paperclip, Sparkles, Image as ImageIcon, CornerDownLeft } from 'lucide-react';
 
 export default function PromptComposer({ onSend, activeModel }) {
   const [input, setInput] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!input.trim()) return;
-    onSend(input);
-    setInput('');
-  };
+  const textareaRef = useRef(null);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSubmit(e);
+      handleSubmit();
     }
   };
 
+  const handleSubmit = () => {
+    if (!input.trim()) return;
+    onSend(input);
+    setInput('');
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+    }
+  };
+
+  const handleTextareaChange = (e) => {
+    setInput(e.target.value);
+    e.target.style.height = 'auto';
+    e.target.style.height = `${Math.min(e.target.scrollHeight, 160)}px`;
+  };
+
   return (
-    <div className="w-full max-w-2xl mx-auto pt-2 pb-1">
-      <form 
-        onSubmit={handleSubmit}
-        className="relative rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] focus-within:border-violet-500/60 focus-within:ring-2 focus-within:ring-violet-500/20 shadow-2xl transition-all p-3.5 overflow-hidden"
-      >
-        {/* Soft Rounded Text Input Area */}
+    <div className="w-full pt-2 pb-4 bg-[var(--bg-workspace)]">
+      <div className="relative rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-xl p-3 focus-within:border-violet-500/50 transition-all">
+        
+        {/* Main Inputs Area */}
         <textarea
-          rows={2}
+          ref={textareaRef}
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={handleTextareaChange}
           onKeyDown={handleKeyDown}
           placeholder={`Ask ${activeModel || 'Echo Cat'} anything... (Press Enter to send)`}
-          className="w-full bg-transparent resize-none outline-none border-none focus:ring-0 focus:outline-none text-xs md:text-sm text-[var(--text-main)] placeholder-[var(--text-muted)] px-2 pr-10 rounded-2xl"
+          rows={1}
+          className="w-full bg-transparent px-3 py-1.5 text-xs md:text-sm text-[var(--text-main)] placeholder-[var(--text-muted)] resize-none focus:outline-none max-h-40 overflow-y-auto"
         />
 
-        {/* Inner Controls Bar */}
-        <div className="flex items-center justify-between pt-2 px-1 border-t border-[var(--border-subtle)]/30 mt-1">
+        {/* Action Controls Bar */}
+        <div className="flex items-center justify-between pt-2 border-t border-[var(--border-subtle)]/40 px-1">
           
-          {/* Left Tool Icons & Engine Pill */}
-          <div className="flex items-center gap-1.5">
-            <button
+          {/* Quick Upload Buttons */}
+          <div className="flex items-center gap-1">
+            <button 
               type="button"
-              className="p-1.5 rounded-full text-[var(--text-muted)] hover:text-violet-400 hover:bg-[var(--bg-workspace)] transition-colors"
+              className="p-1.5 rounded-xl text-[var(--text-muted)] hover:text-violet-500 hover:bg-[var(--bg-workspace)] transition-colors"
               title="Attach File"
             >
-              <Paperclip className="h-3.5 w-3.5" />
+              <Paperclip className="h-4 w-4" />
             </button>
-
-            <button
+            <button 
               type="button"
-              className="p-1.5 rounded-full text-[var(--text-muted)] hover:text-violet-400 hover:bg-[var(--bg-workspace)] transition-colors"
-              title="Voice Input"
+              className="p-1.5 rounded-xl text-[var(--text-muted)] hover:text-violet-500 hover:bg-[var(--bg-workspace)] transition-colors"
+              title="Upload Image"
             >
-              <Mic className="h-3.5 w-3.5" />
+              <ImageIcon className="h-4 w-4" />
             </button>
-
-            <div className="h-3 w-[1px] bg-[var(--border-subtle)] mx-1" />
-
-            <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-[var(--bg-workspace)] text-violet-400 border border-[var(--border-subtle)] flex items-center gap-1 shadow-inner">
-              <Sparkles className="h-2.5 w-2.5" />
-              {activeModel || "GPT-5 Cyber"}
+            <span className="text-[10px] text-[var(--text-muted)] font-mono ml-2 hidden sm:inline-block">
+              Shift + Enter for new line
             </span>
           </div>
 
-          {/* Pill Send Button */}
+          {/* Submit Button */}
           <button
-            type="submit"
+            onClick={handleSubmit}
             disabled={!input.trim()}
-            className={`px-4 py-1.5 rounded-full transition-all flex items-center gap-1.5 text-xs font-semibold ${
+            className={`p-2 rounded-2xl flex items-center justify-center transition-all ${
               input.trim()
-                ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-md shadow-violet-600/25 hover:scale-105 active:scale-95 cursor-pointer'
-                : 'bg-[var(--bg-workspace)] text-[var(--text-muted)] cursor-not-allowed opacity-50'
+                ? 'bg-gradient-to-tr from-violet-600 to-fuchsia-600 text-white shadow-md shadow-violet-500/20 hover:scale-105 active:scale-95'
+                : 'bg-[var(--bg-workspace)] text-[var(--text-muted)] opacity-50 cursor-not-allowed'
             }`}
           >
-            <span>Send</span>
-            <Send className="h-3 w-3" />
+            <ArrowUp className="h-4 w-4 stroke-[2.5]" />
           </button>
 
         </div>
-      </form>
+
+      </div>
     </div>
   );
 }
