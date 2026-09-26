@@ -580,8 +580,8 @@ export default function LandingPage({ onLaunchApp = () => {} }) {
             <ul className="space-y-2 text-xs text-slate-400 font-medium">
               <li><a href="#faq" className="hover:text-violet-400 transition-colors">FAQ</a></li>
               <li><a href="#testimonials" className="hover:text-violet-400 transition-colors">Developer Reviews</a></li>
-              <li><span className="text-slate-600 cursor-not-allowed">API Documentation</span></li>
-              <li><span className="text-slate-600 cursor-not-allowed">Status Page</span></li>
+              {/* <li><span className="text-slate-600 cursor-not-allowed">API Documentation</span></li>
+              <li><span className="text-slate-600 cursor-not-allowed">Status Page</span></li> */}
             </ul>
           </div>
 
