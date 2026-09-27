@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Cat, Sparkles, Github, ExternalLink, Star, Puzzle } from 'lucide-react';
+import { X, Cat, Sparkles, Terminal, ExternalLink, Star, Puzzle } from 'lucide-react';
 
 export default function ExtensionPreviewModal({ open, onClose, githubUrl }) {
   if (!open) return null;
@@ -59,7 +59,7 @@ export default function ExtensionPreviewModal({ open, onClose, githubUrl }) {
             rel="noopener noreferrer"
             className="w-full px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-white font-semibold text-sm flex items-center justify-center gap-2 transition-colors"
           >
-            <Github className="h-4 w-4" />
+            <Terminal className="h-4 w-4" />
             View Source & Install Instructions
             <ExternalLink className="h-3.5 w-3.5" />
           </a>

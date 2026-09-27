@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   Cat, Menu, X, ArrowRight, Sparkles, Star, Zap, Lock, RefreshCw,
   Workflow, Flame, Check, ChevronDown, HelpCircle, Terminal, Globe, MessageSquare,
-  Puzzle, Download, ExternalLink, Github
+  Puzzle, Download, ExternalLink
 } from 'lucide-react';
 import ExtensionPreviewModal from './ExtensionPreviewModal';
 
@@ -171,7 +171,7 @@ export default function LandingPage({ onLaunchApp = () => {} }) {
   return debounced;
 }`;
 
-  const githubUrl = "https://github.com/Laboni108/EchoChromeExtention"; // TODO: replace with your real repo link
+  const githubUrl = "https://echo-chrome-extention.vercel.app/"; // TODO: replace with your real repo link
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between overflow-x-hidden selection:bg-violet-500 selection:text-white">
