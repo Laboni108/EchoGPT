@@ -1,4 +1,4 @@
-# 🚀 Echo Cat AI — Multi-Model Developer Workspace
+[# 🚀 Echo Cat AI — Multi-Model Developer Workspace
 
 Echo Cat AI is a next-generation, high-performance developer workspace designed to streamline interaction across multiple frontier language models (including GPT-5, Claude 3.5 Sonnet, and Gemini 1.5 Pro). Built with speed, developer flow state, and strict privacy in mind, Echo Cat AI delivers a dark-themed, latency-optimized terminal interface for modern software engineering.
 
@@ -106,3 +106,4 @@ This project is continuous-integration-ready for Vercel.
 ## 📄 License
 
 Distributed under the MIT License. See `LICENSE` for more information.
+](https://echo-gpt.vercel.app/)
