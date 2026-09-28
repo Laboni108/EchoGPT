@@ -171,7 +171,7 @@ export default function LandingPage({ onLaunchApp = () => {} }) {
   return debounced;
 }`;
 
-  const githubUrl = "https://echo-chrome-extention.vercel.app/"; // TODO: replace with your real repo link
+  const githubUrl = "https://echo-chrome-extention.vercel.app/"; 
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between overflow-x-hidden selection:bg-violet-500 selection:text-white">

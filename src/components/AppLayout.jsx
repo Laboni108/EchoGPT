@@ -3,23 +3,44 @@ import SettingsModal from './SettingsModal';
 import UserProfile from './UserProfile';
 import PlanModal from './PlanModal';
 import ModelSelectorModal from './ModelSelectorModal';
-import { 
-  PanelLeftClose, 
-  PanelLeft, 
-  SquarePlus, 
-  Search, 
-  MessageSquare, 
-  Settings, 
-  Sun, 
-  Moon, 
-  Cpu, 
+import {
+  PanelLeftClose,
+  PanelLeft,
+  SquarePlus,
+  Search,
+  MessageSquare,
+  Settings,
+  Sun,
+  Moon,
+  Cpu,
   X,
   ChevronDown,
   Cat,
-  Menu
+  Menu,
+  Trash2
 } from 'lucide-react';
 
-export default function AppLayout({ children, activeModel, onSelectModel, onNewSession }) {
+// Turns a timestamp into "Just now", "5m ago", "2h ago", "Yesterday", "3d ago"
+const formatSessionTime = (timestamp) => {
+  const minutes = Math.floor((Date.now() - timestamp) / 60000);
+  if (minutes < 1) return 'Just now';
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return days === 1 ? 'Yesterday' : `${days}d ago`;
+};
+
+export default function AppLayout({
+  children,
+  activeModel,
+  onSelectModel,
+  sessions = [],
+  activeSessionId = null,
+  onNewSession,
+  onSelectSession,
+  onDeleteSession
+}) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -49,23 +70,22 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
     if (onNewSession) onNewSession();
   };
 
-  const dummyHistory = [
-    { id: 1, title: "Refactoring React Hooks", time: "Today" },
-    { id: 2, title: "EchoGPT Cyber Architecture", time: "Today" },
-    { id: 3, title: "Tailwind v4 Setup Guide", time: "Yesterday" },
-    { id: 4, title: "Python Data Processing Script", time: "7 Days Ago" },
-  ];
+  const handleSelectSessionClick = (id) => {
+    setIsMobileOpen(false);
+    if (onSelectSession) onSelectSession(id);
+  };
 
-  const filteredHistory = dummyHistory.filter(item => 
-    item.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Real conversations, newest first, filtered by the search box
+  const filteredHistory = [...sessions]
+    .sort((a, b) => b.updatedAt - a.updatedAt)
+    .filter((item) => item.title.toLowerCase().includes(searchQuery.toLowerCase()));
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[var(--bg-workspace)] text-[var(--text-main)]">
-      
+
       {/* Mobile Backdrop */}
       {isMobileOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-40 bg-black/60 backdrop-blur-md md:hidden transition-opacity"
           onClick={() => setIsMobileOpen(false)}
           aria-hidden="true"
@@ -73,7 +93,7 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
       )}
 
       {/* SIDEBAR */}
-      <aside 
+      <aside
         className={`
           fixed md:static inset-y-0 left-0 z-50 flex flex-col
           bg-[var(--bg-surface)] border-r border-[var(--border-subtle)]
@@ -86,7 +106,7 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
         {/* Header with High-Contrast Echo Cat Badge */}
         <div className="flex items-center justify-between h-16 px-4 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-3 overflow-hidden">
-            
+
             {/* High-Contrast Cat Logo Badge */}
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-slate-900 dark:bg-[#111726] text-amber-400 border border-slate-700 dark:border-slate-800 shadow-md">
               <Cat className="h-6 w-6 stroke-[2.2]" />
@@ -105,18 +125,20 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
           </div>
 
           {/* Desktop Collapse Button */}
-          <button 
+          <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="hidden md:flex p-2 rounded-xl text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface-hover)] transition-colors"
             title={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+            aria-label={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
           >
             {isSidebarOpen ? <PanelLeftClose className="h-5 w-5" /> : <PanelLeft className="h-5 w-5" />}
           </button>
 
           {/* Mobile Close Button */}
-          <button 
+          <button
             onClick={() => setIsMobileOpen(false)}
             className="md:hidden p-2 rounded-xl text-[var(--text-muted)] hover:text-[var(--text-main)]"
+            aria-label="Close navigation sidebar"
           >
             <X className="h-5 w-5" />
           </button>
@@ -124,10 +146,11 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
 
         {/* Action Button */}
         <div className="p-3">
-          <button 
+          <button
             onClick={handleNewSessionClick}
             className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white font-semibold shadow-lg shadow-violet-600/25 transition-all hover:scale-[1.02] active:scale-[0.98]"
             title="New Session"
+            aria-label="New Session"
           >
             <SquarePlus className="h-5 w-5 shrink-0" />
             {isSidebarOpen && <span>New Session</span>}
@@ -139,9 +162,10 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
           <div className="px-3 py-1">
             <div className="relative flex items-center">
               <Search className="absolute left-3 h-4 w-4 text-[var(--text-muted)]" />
-              <input 
-                type="text" 
+              <input
+                type="text"
                 placeholder="Search history..."
+                aria-label="Search history"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-9 pr-3 py-2 text-xs rounded-xl bg-[var(--bg-workspace)] border border-[var(--border-subtle)] focus:border-violet-500 outline-none text-[var(--text-main)] placeholder-[var(--text-muted)] transition-all"
@@ -157,21 +181,63 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
               Recent Threads
             </div>
           )}
-          {filteredHistory.map((item) => (
-            <button 
-              key={item.id}
-              onClick={() => setIsMobileOpen(false)}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface-hover)] transition-colors text-left group"
-            >
-              <MessageSquare className="h-4 w-4 shrink-0 group-hover:text-amber-500 transition-colors" />
-              {isSidebarOpen && <span className="truncate flex-1">{item.title}</span>}
-            </button>
-          ))}
+
+          {isSidebarOpen && filteredHistory.length === 0 && (
+            <p className="px-3 py-6 text-center text-xs text-[var(--text-muted)] leading-relaxed">
+              {sessions.length === 0
+                ? "No conversations yet. Send a message to start one."
+                : "No matches found."}
+            </p>
+          )}
+
+          {filteredHistory.map((item) => {
+            const isActive = item.id === activeSessionId;
+            return (
+              <div key={item.id} className="group relative flex items-center">
+                <button
+                  onClick={() => handleSelectSessionClick(item.id)}
+                  aria-current={isActive ? 'true' : undefined}
+                  title={item.title}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-colors text-left ${
+                    isSidebarOpen ? 'pr-10' : ''
+                  } ${
+                    isActive
+                      ? 'bg-[var(--bg-surface-hover)] text-[var(--text-main)]'
+                      : 'text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface-hover)]'
+                  }`}
+                >
+                  <MessageSquare
+                    className={`h-4 w-4 shrink-0 transition-colors ${
+                      isActive ? 'text-amber-500' : 'group-hover:text-amber-500'
+                    }`}
+                  />
+                  {isSidebarOpen && (
+                    <span className="flex-1 min-w-0">
+                      <span className="block truncate">{item.title}</span>
+                      <span className="block text-[10px] font-normal text-[var(--text-muted)]">
+                        {formatSessionTime(item.updatedAt)}
+                      </span>
+                    </span>
+                  )}
+                </button>
+
+                {isSidebarOpen && (
+                  <button
+                    onClick={() => onDeleteSession && onDeleteSession(item.id)}
+                    aria-label={`Delete conversation: ${item.title}`}
+                    className="absolute right-2 p-1.5 rounded-lg opacity-0 group-hover:opacity-100 focus-visible:opacity-100 text-[var(--text-muted)] hover:text-rose-400 hover:bg-rose-500/10 transition-all"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                )}
+              </div>
+            );
+          })}
         </div>
 
         {/* Footer */}
         <div className="p-3 border-t border-[var(--border-subtle)] space-y-2">
-          <button 
+          <button
             onClick={() => setIsDarkMode(!isDarkMode)}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface-hover)] transition-colors"
           >
@@ -180,7 +246,7 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
           </button>
 
           {/* Preferences Button linked to SettingsModal */}
-          <button 
+          <button
             onClick={() => setIsSettingsOpen(true)}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface-hover)] transition-colors"
           >
@@ -195,13 +261,13 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
 
       {/* WORKSPACE MAIN CONTAINER */}
       <div className="flex-1 flex flex-col h-full overflow-hidden">
-        
+
         {/* Header Bar */}
         <header className="h-16 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)]/90 backdrop-blur-md flex items-center justify-between px-4 z-10">
           <div className="flex items-center gap-3">
-            
+
             {/* Mobile Drawer Hamburger Toggle Button */}
-            <button 
+            <button
               onClick={() => setIsMobileOpen(true)}
               className="md:hidden p-2 rounded-xl text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface-hover)] transition-colors"
               aria-label="Open navigation sidebar"
@@ -211,17 +277,18 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
 
             {/* Desktop Expand Toggle (Visible only when sidebar is collapsed on desktop) */}
             {!isSidebarOpen && (
-              <button 
+              <button
                 onClick={() => setIsSidebarOpen(true)}
                 className="hidden md:flex p-2 rounded-xl text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface-hover)] transition-colors"
                 title="Expand sidebar"
+                aria-label="Expand sidebar"
               >
                 <PanelLeft className="h-5 w-5" />
               </button>
             )}
 
             {/* Model Selector Button */}
-            <button 
+            <button
               onClick={() => setIsModelModalOpen(true)}
               className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-workspace)] hover:border-violet-500/40 transition-all text-xs font-semibold shadow-sm"
             >
@@ -249,7 +316,7 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
       </div>
 
       {/* Model Selector Modal */}
-      <ModelSelectorModal 
+      <ModelSelectorModal
         isOpen={isModelModalOpen}
         onClose={() => setIsModelModalOpen(false)}
         selectedModel={activeModel || "GPT-5 Cyber"}
@@ -257,13 +324,13 @@ export default function AppLayout({ children, activeModel, onSelectModel, onNewS
       />
 
       {/* Settings Modal */}
-      <SettingsModal 
+      <SettingsModal
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
       />
 
       {/* Plan Modal */}
-      <PlanModal 
+      <PlanModal
         isOpen={isPlanModalOpen}
         onClose={() => setIsPlanModalOpen(false)}
       />
