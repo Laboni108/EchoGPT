@@ -171,7 +171,7 @@ export default function LandingPage({ onLaunchApp = () => {} }) {
   return debounced;
 }`;
 
-  const githubUrl = "https://echo-chrome-extention.vercel.app/"; 
+  const githubUrl = import.meta.env.VITE_EXTENSION_URL || "http://localhost:5174/"; 
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between overflow-x-hidden selection:bg-violet-500 selection:text-white">
