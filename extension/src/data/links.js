@@ -1,1 +1,1 @@
-export const WEB_APP_URL = "https://echo-gpt.vercel.app/";
+export const WEB_APP_URL = import.meta.env.VITE_WEB_APP_URL || "http://localhost:5173/";
